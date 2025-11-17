@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package user;
+
+service UserService {
+  rpc FindOne(FindOneUserDto) returns (User);
+  rpc FindAll(common.PaginationQuery) returns (UsersResponse);
+  rpc FindByIds(FindByIdsDto) returns (UsersResponse);
+  rpc ValidateUser(ValidateUserDto) returns (User);
+  rpc Create(CreateUserDto) returns (User);
+}
+
+message User {
+  string id = 1;
+  string email = 2;
+  string password = 3;
+  string name = 4;
+}
+
+message FindOneUserDto {
+  string id = 1;
+}
+
+message FindByIdsDto {
+  repeated string ids = 1;
+}
+
+message ValidateUserDto {
+  string email = 1;
+  string password = 2;
+}
+
+message CreateUserDto {
+  string email = 1;
+  string password = 2;
+  string name = 3;
+}
+
+message UsersResponse {
+  repeated User users = 1;
+}
