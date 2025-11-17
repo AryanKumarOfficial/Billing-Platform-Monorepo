@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+import "common.proto";
+
+package invoice;
+
+service InvoiceService {
+  rpc FindOne(FindOneInvoiceDto) returns (Invoice);
+  rpc FindAll(common.PaginationQuery) returns (InvoicesResponse);
+  rpc FindAllByUser(FindAllByUserDto) returns (InvoicesResponse);
+  rpc Create(CreateInvoiceDto) returns (Invoice); // For seeding
+}
+
+message Invoice {
+  string id = 1;
+  string userId = 2;
+  string description = 3;
+  int32 amount = 4;
+  string status = 5;
+  string createdAt = 6;
+}
+
+message FindOneInvoiceDto {
+  string id = 1;
+}
+
+message FindAllByUserDto {
+  string userId = 1;
+  common.PaginationQuery pagination = 2;
+}
+
+message CreateInvoiceDto {
+  string userId = 1;
+  string description = 2;
+  int32 amount = 3;
+}
+
+message InvoicesResponse {
+  repeated Invoice invoices = 1;
+}
