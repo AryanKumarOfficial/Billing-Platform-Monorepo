@@ -4,7 +4,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { ConsulModule } from '@app/common/src';
 import { UserModule } from './user/user.module';
 import { User } from './user/user.entity';
-import * as Joi from 'joi';
+import Joi from 'joi';
 
 @Module({
     imports: [
