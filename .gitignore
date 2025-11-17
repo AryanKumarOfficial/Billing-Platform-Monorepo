@@ -1,5 +1,19 @@
-# modules
-node_modules/
-
 # IDE directories
 .idea/
+
+#NestJS
+
+.DS_Store
+.env
+.nest/
+.vscode/
+*.tsbuildinfo
+dist/
+node_modules/
+
+#OS
+.DS_Store?
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.d
