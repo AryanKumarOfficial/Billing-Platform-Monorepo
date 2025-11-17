@@ -1,0 +1,16 @@
+{
+  "name": "@app/proto",
+  "version": "1.0.0",
+  "description": "Shared Protobuf definitions",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.json",
+    "prebuild": "pnpm run copy:protos",
+    "copy:protos": "rimraf dist/proto && mkdir -p dist/proto && cp -R src/proto dist/proto"
+  },
+  "devDependencies": {
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  }
+}
