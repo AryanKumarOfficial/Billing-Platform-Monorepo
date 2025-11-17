@@ -19,7 +19,7 @@
     "passport-local": "^1.0.0"
   },
   "devDependencies": {
-    "@types/consul": "^0.0.38",
+    "@types/consul": "^2.0.0",
     "@types/passport-jwt": "^4.0.1",
     "@types/passport-local": "^1.0.38",
     "rimraf": "^5.0.5",
