@@ -1,0 +1,28 @@
+{
+  "name": "@app/common",
+  "version": "1.0.0",
+  "description": "Shared NestJS modules (Consul, Config, Auth)",
+  "main": "dist/index.js",
+  "types": "dist/index.d.ts",
+  "scripts": {
+    "build": "rimraf dist && tsc -p tsconfig.json"
+  },
+  "dependencies": {
+    "@nestjs/common": "^10.3.0",
+    "@nestjs/config": "^3.1.1",
+    "@nestjs/jwt": "^10.2.0",
+    "@nestjs/passport": "^10.0.3",
+    "consul": "^1.2.0",
+    "joi": "^17.12.0",
+    "passport": "^0.7.0",
+    "passport-jwt": "^4.0.1",
+    "passport-local": "^1.0.0"
+  },
+  "devDependencies": {
+    "@types/consul": "^0.0.38",
+    "@types/passport-jwt": "^4.0.1",
+    "@types/passport-local": "^1.0.38",
+    "rimraf": "^5.0.5",
+    "typescript": "^5.3.3"
+  }
+}
