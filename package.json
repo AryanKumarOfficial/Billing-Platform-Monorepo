@@ -1,0 +1,27 @@
+{
+  "name": "billing-platform-monorepo",
+  "private": true,
+  "version": "1.0.0",
+  "description": "NestJS Microservices Monorepo (gRPC, Consul, Gateway)",
+  "scripts": {
+    "build": "pnpm --filter \"./apps/**\" build",
+    "start:dev": "docker-compose up --build",
+    "stop": "docker-compose down",
+    "test": "pnpm --filter \"./apps/**\" test",
+    "test:e2e": "pnpm --filter \"./apps/**\" test:e2e",
+    "proto:install": "pnpm add @grpc/grpc-js @grpc/proto-loader @nestjs/microservices",
+    "proto:build": "pnpm --filter=\"@app/proto\" run build"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.5",
+    "typescript": "^5.3.3",
+    "rimraf": "^5.0.5",
+    "ts-node": "^10.9.2"
+  },
+  "pnpm": {
+    "workspaces": [
+      "apps/*",
+      "libs/*"
+    ]
+  }
+}
