@@ -1,0 +1,77 @@
+version: '3.8'
+
+services:
+  consul:
+    image: hashicorp/consul:1.18
+    container_name: consul
+    ports:
+      - "8500:8500" # UI & HTTP API
+      - "8600:8600/udp" # DNS
+    command: "agent -dev -client=0.0.0.0 -ui"
+
+  postgres-user-db:
+    image: postgres:16
+    container_name: postgres-user-db
+    environment:
+      POSTGRES_DB: user_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres-user-data:/var/lib/postgresql/data
+    ports:
+      - "5432:5432"
+
+  postgres-invoice-db:
+    image: postgres:16
+    container_name: postgres-invoice-db
+    environment:
+      POSTGRES_DB: invoice_db
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: password
+    volumes:
+      - postgres-invoice-data:/var/lib/postgresql/data
+    ports:
+      - "5433:5432"
+
+  user-service:
+    build:
+      context: .
+      dockerfile: ./apps/user-service/Dockerfile
+    container_name: user-service
+    env_file:
+      - ./apps/user-service/.env
+    depends_on:
+      - consul
+      - postgres-user-db
+    restart: on-failure
+
+  invoice-service:
+    build:
+      context: .
+      dockerfile: ./apps/invoice-service/Dockerfile
+    container_name: invoice-service
+    env_file:
+      - ./apps/invoice-service/.env
+    depends_on:
+      - consul
+      - postgres-invoice-db
+    restart: on-failure
+
+  gateway:
+    build:
+      context: .
+      dockerfile: ./apps/gateway/Dockerfile
+    container_name: gateway
+    ports:
+      - "3000:3000"
+    env_file:
+      - ./apps/gateway/.env
+    depends_on:
+      - consul
+      - user-service
+      - invoice-service
+    restart: on-failure
+
+volumes:
+  postgres-user-data:
+  postgres-invoice-data:
