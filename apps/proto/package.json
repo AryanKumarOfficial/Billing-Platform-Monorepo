@@ -7,10 +7,12 @@
   "scripts": {
     "build": "rimraf dist && tsc -p tsconfig.json",
     "prebuild": "pnpm run copy:protos",
-    "copy:protos": "rimraf dist/proto && mkdir -p dist/proto && cp -R src/proto dist/proto"
+    "copy:protos": "rimraf dist/proto && mkdirp dist/proto && copyfiles -u 1 \"src/proto/**/*.proto\" dist/proto"
   },
   "devDependencies": {
     "rimraf": "^5.0.5",
-    "typescript": "^5.3.3"
+    "typescript": "^5.3.3",
+    "mkdirp": "^3.0.1",
+    "copyfiles": "^2.4.1"
   }
 }
