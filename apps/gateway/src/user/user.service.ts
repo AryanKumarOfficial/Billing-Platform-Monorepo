@@ -1,27 +1,40 @@
-import { Injectable } from '@nestjs/common';
-import { ClientProvider } from '../client/client.provider';
-import { USER_SERVICE_NAME } from '@app/proto';
-import { FindAllUsersResponseDto } from './dto/find-all-users.dto';
-import { FindOneUserResponseDto } from './dto/find-one-user.dto';
-import { UserDto } from './dto/user.dto';
+import {Injectable} from '@nestjs/common';
+import {ClientProvider} from '../client/client.provider';
+import {USER_SERVICE_NAME} from '@app/proto';
+import {FindAllUsersResponseDto} from './dto/find-all-users.dto';
+import {FindOneUserResponseDto} from './dto/find-one-user.dto';
+import {UserDto} from './dto/user.dto';
 
 /**
- * gRPC client interface — include index signature so it satisfies provider constraints.
+ * gRPC client interface
  */
 interface UserServiceClient {
     [key: string]: any;
-    // method names used by your user-service. Adjust to match your proto if different.
-    findAll?: (query: { limit: number; offset: number }) => Promise<{ users: any[]; total?: number }>;
-    findOne?: (q: { id: string }) => Promise<any | null>;
+
+    findAll: (
+        query: { limit: number; offset: number },
+        callback: (err: any, response: any) => void
+    ) => void;
+    findOne: (
+        q: { id: string },
+        callback: (err: any, response: any) => void
+    ) => void;
 }
 
 @Injectable()
 export class UserService {
-    constructor(private readonly clientProvider: ClientProvider) {}
+    constructor(private readonly clientProvider: ClientProvider) {
+    }
 
     async findAll(pagination: { limit: number; offset: number }): Promise<FindAllUsersResponseDto> {
         const client = await this.clientProvider.getServiceClient<UserServiceClient>(USER_SERVICE_NAME);
-        const resp = await client.findAll!(pagination); // non-null assert because interface optional
+
+        const resp: any = await new Promise((resolve, reject) => {
+            client.findAll(pagination, (err, response) => {
+                if (err) return reject(err);
+                resolve(response);
+            });
+        });
 
         const usersRaw = Array.isArray(resp?.users) ? resp.users : [];
         const users = usersRaw.map((u: any) => {
@@ -43,9 +56,15 @@ export class UserService {
 
     async findOne(id: string): Promise<FindOneUserResponseDto> {
         const client = await this.clientProvider.getServiceClient<UserServiceClient>(USER_SERVICE_NAME);
-        const userRaw = await client.findOne!({ id });
 
-        if (!userRaw) return { user: null };
+        const userRaw: any = await new Promise((resolve, reject) => {
+            client.findOne({id}, (err, response) => {
+                if (err) return reject(err);
+                resolve(response);
+            });
+        });
+
+        if (!userRaw) return {user: null};
 
         const user: UserDto = {
             id: userRaw.id ?? userRaw._id ?? '',
@@ -53,6 +72,6 @@ export class UserService {
             name: userRaw.name ?? '',
         };
 
-        return { user };
+        return {user};
     }
 }
