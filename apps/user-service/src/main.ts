@@ -4,7 +4,7 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ConsulService } from '@app/common';
-import { USER_PACKAGE_NAME, USER_PROTO_PATH } from '@app/proto';
+import { USER_PACKAGE_NAME, USER_PROTO_PATH,USER_SERVICE_NAME } from '@app/proto';
 
 async function bootstrap() {
     const logger = new Logger('UserService');
@@ -37,13 +37,13 @@ async function bootstrap() {
     // Register with Consul AFTER the service is listening
     try {
         await consulService.registerService(
-            'user-service',
+            USER_SERVICE_NAME,
             port,
             address,
             ['grpc', 'v1'],
         );
         logger.log(`UserService is listening on port ${port}`);
-        logger.log(`Registered with Consul as 'user-service' at ${address}:${port}`);
+        logger.log(`Registered with Consul as ${USER_SERVICE_NAME} at ${address}:${port}`);
     } catch (error) {
         logger.error('Failed to register with Consul', error);
         await app.close();

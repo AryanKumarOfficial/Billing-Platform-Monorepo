@@ -6,7 +6,8 @@
     "start": "node -r tsconfig-paths/register dist/main",
     "start:dev": "nest start --watch",
     "test": "jest",
-    "seed": "ts-node -r tsconfig-paths/register src/seed.ts"
+    "seed": "ts-node -r tsconfig-paths/register ./src/seed.ts",
+    "seed:prod": "docker-compose exec invoice-service node apps/invoice-service/dist/seed.js"
   },
   "dependencies": {
     "@app/common": "workspace:*",

@@ -4,7 +4,7 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ConsulService } from '@app/common';
-import { INVOICE_PACKAGE_NAME, INVOICE_PROTO_PATH } from '@app/proto';
+import { INVOICE_PACKAGE_NAME, INVOICE_PROTO_PATH,INVOICE_SERVICE_NAME } from '@app/proto';
 
 async function bootstrap() {
     const logger = new Logger('InvoiceService');
@@ -40,14 +40,14 @@ async function bootstrap() {
     // Register with Consul AFTER the service is listening
     try {
         await consulService.registerService(
-            'invoice-service',
+            INVOICE_SERVICE_NAME,
             port,
             address,
             ['grpc', 'v1'],
         );
         logger.log(`InvoiceService is listening on port ${port}`);
         logger.log(
-            `Registered with Consul as 'invoice-service' at ${address}:${port}`,
+            `Registered with Consul as ${INVOICE_SERVICE_NAME} at ${address}:${port}`,
         );
     } catch (error) {
         logger.error('Failed to register with Consul', error);

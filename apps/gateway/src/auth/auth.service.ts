@@ -4,13 +4,13 @@ import { ClientProvider } from '../client/client.provider';
 import { USER_SERVICE_NAME } from '@app/proto';
 import { RpcException } from '@nestjs/microservices';
 
-// Define the gRPC client interface
+// Define the gRPC client interface matching the raw grpc-js signature
 interface UserServiceClient {
-    [key: string]: Function;
-    validateUser: (data: {
-        email: string;
-        password: string;
-    }) => Promise<{ id: string; email: string; name: string }>;
+    [key: string]: any;
+    validateUser: (
+        data: { email: string; password: string },
+        callback: (err: any, response: any) => void
+    ) => void;
 }
 
 @Injectable()
@@ -33,19 +33,25 @@ export class AuthService {
                     USER_SERVICE_NAME,
                 );
 
-            // gRPC methods return a promise
-            const user = await userService.validateUser({ email, password: pass });
+            // FIX: Wrap the callback-based gRPC method in a Promise
+            const user = await new Promise((resolve, reject) => {
+                userService.validateUser({ email, password: pass }, (err, response) => {
+                    if (err) {
+                        reject(err);
+                    } else {
+                        resolve(response);
+                    }
+                });
+            });
 
             if (user) {
-                return user; // Return the user object (without password)
+                return user;
             }
             return null;
-        } catch (error) {
+        } catch (error: any) {
             this.logger.warn(`Login validation failed for ${email}: ${error.message}`);
-            if (error instanceof RpcException) {
-                return null;
-            }
-            throw error;
+            // Return null so LocalStrategy throws UnauthorizedException
+            return null;
         }
     }
 
