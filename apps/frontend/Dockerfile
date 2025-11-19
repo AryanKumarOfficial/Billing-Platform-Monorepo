@@ -23,6 +23,7 @@ WORKDIR /usr/src/app
 RUN npm install -g pnpm
 
 COPY --from=deps /usr/src/app/node_modules ./node_modules
+COPY --from=deps /usr/src/app/apps/frontend/node_modules ./apps/frontend/node_modules
 COPY --from=deps /usr/src/app/package.json ./package.json
 COPY --from=deps /usr/src/app/pnpm-lock.yaml ./pnpm-lock.yaml
 
@@ -45,7 +46,6 @@ RUN addgroup --system --gid 1001 nodejs
 RUN adduser --system --uid 1001 nextjs
 
 # Copy the standalone build output
-# The standalone build puts the server at apps/frontend/server.js
 COPY --from=builder /usr/src/app/apps/frontend/public ./apps/frontend/public
 COPY --from=builder --chown=nextjs:nodejs /usr/src/app/apps/frontend/.next/standalone ./
 COPY --from=builder --chown=nextjs:nodejs /usr/src/app/apps/frontend/.next/static ./apps/frontend/.next/static

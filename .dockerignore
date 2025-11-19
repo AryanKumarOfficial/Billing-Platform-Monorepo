@@ -2,12 +2,26 @@
 # Ignore all node_modules folders
 **/node_modules
 node_modules/
-# Ignore all dist folders
+# Ignore all build artifacts
 **/dist
+**/.next
+**/coverage
 # Ignore development files
 .env
+.env.local
+.env.*.local
 .DS_Store
 .git
 .gitignore
+LICENSE
+README.md
+
+# Ignore logs
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Documentation
 LICENSE
 README.md

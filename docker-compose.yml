@@ -72,6 +72,19 @@ services:
       - invoice-service
     restart: on-failure
 
+  frontend:
+    build:
+      context: .
+      dockerfile: ./apps/frontend/Dockerfile
+    container_name: frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NEXT_PUBLIC_API_URL=http://localhost:5000
+    depends_on:
+      - gateway
+    restart: on-failure
+
 volumes:
   postgres-user-data:
   postgres-invoice-data:
