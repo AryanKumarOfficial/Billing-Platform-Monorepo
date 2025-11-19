@@ -1,65 +1,108 @@
-import Image from "next/image";
+'use client';
+import {useState} from 'react';
+import {api} from '@/lib/api';
+import LoginForm from '@/components/LoginForm';
+import InvoiceTable from '@/components/InvoiceTable';
 
 export default function Home() {
-  return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    const [token, setToken] = useState<string | null>(null);
+    const [reportData, setReportData] = useState<any>(null);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const handleLogin = async (email: string, pass: string) => {
+        try {
+            const result = await api.login(email, pass);
+            console.log(`result: `, result);
+            setToken(result.access_token);
+        } catch (e) {
+            console.error(e);
+            alert('Login Failed: Check console for details');
+        }
+    };
+
+    const loadReports = async () => {
+        if (!token) return;
+        setIsLoading(true);
+        try {
+            // We default to fetching the first 10 items
+            const data = await api.getReports(token);
+            setReportData(data);
+        } catch (error) {
+            console.error(error);
+            alert('Failed to fetch reports');
+        } finally {
+            setIsLoading(false);
+        }
+    };
+
+    // 1. If not logged in, show the Login Component
+    if (!token) {
+        return <LoginForm onLogin={handleLogin}/>;
+    }
+
+    // 2. If logged in, show the Dashboard
+    return (
+        <div className="min-h-screen bg-gray-100">
+            <nav className="bg-white shadow-sm">
+                <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                    <div className="flex justify-between h-16">
+                        <div className="flex items-center">
+                            <span className="text-xl font-bold text-indigo-600">BillingPlatform</span>
+                        </div>
+                        <div className="flex items-center">
+                            <span
+                                className="text-sm text-green-600 bg-green-50 px-3 py-1 rounded-full border border-green-200">
+                                ● Connected via Gateway
+                            </span>
+                            <button
+                                onClick={() => setToken(null)}
+                                className="ml-4 text-sm text-gray-500 hover:text-gray-700"
+                            >
+                                Logout
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </nav>
+
+            <main className="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
+                <div className="px-4 py-6 sm:px-0">
+                    <div className="flex justify-between items-center mb-6">
+                        <div>
+                            <h1 className="text-2xl font-bold text-gray-900">Cross-Service Reports</h1>
+                            <p className="mt-1 text-sm text-gray-500">
+                                Aggregating data from <strong>Invoice Service</strong> and <strong>User
+                                Service</strong> via gRPC.
+                            </p>
+                        </div>
+                        <button
+                            onClick={loadReports}
+                            disabled={isLoading}
+                            className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 disabled:opacity-50"
+                        >
+                            {isLoading ? 'Loading...' : 'Refresh Data'}
+                        </button>
+                    </div>
+
+                    {/* Stats Cards (Optional/Bonus) */}
+                    {reportData && (
+                        <div className="grid grid-cols-1 gap-5 sm:grid-cols-3 mb-8">
+                            <div className="bg-white overflow-hidden shadow rounded-lg px-4 py-5 sm:p-6">
+                                <dt className="text-sm font-medium text-gray-500 truncate">Total Invoices</dt>
+                                <dd className="mt-1 text-3xl font-semibold text-gray-900">{reportData.total || 0}</dd>
+                            </div>
+                            {/* You can calculate total revenue here if you like */}
+                            <div className="bg-white overflow-hidden shadow rounded-lg px-4 py-5 sm:p-6">
+                                <dt className="text-sm font-medium text-gray-500 truncate">Data Source</dt>
+                                <dd className="mt-1 text-lg font-semibold text-gray-900">PostgreSQL (x2)</dd>
+                            </div>
+                        </div>
+                    )}
+
+                    {/* Data Table */}
+                    <InvoiceTable invoices={reportData?.data || []}/>
+                </div>
+            </main>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+    );
 }
