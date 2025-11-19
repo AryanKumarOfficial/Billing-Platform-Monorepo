@@ -6,6 +6,7 @@ export const api = {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify({ email, password }),
+            cache: 'no-store',
         });
         if (!res.ok) throw new Error('Login failed');
         return res.json();
@@ -14,6 +15,7 @@ export const api = {
     async getInvoices(token: string) {
         const res = await fetch(`${API_URL}/invoices`, {
             headers: { Authorization: `Bearer ${token}` },
+            cache: 'no-store',
         });
         if (!res.ok) throw new Error('Failed to fetch invoices');
         return res.json();
@@ -22,6 +24,7 @@ export const api = {
     async getReports(token: string) {
         const res = await fetch(`${API_URL}/reports/user-invoices`, {
             headers: { Authorization: `Bearer ${token}` },
+            cache: 'no-store',
         });
         if (!res.ok) throw new Error('Failed to fetch reports');
         return res.json();

@@ -91,7 +91,7 @@ export class ReportService {
                 INVOICE_SERVICE_NAME,
             );
 
-        // Added 'FindAll' (PascalCase) as per proto definition with keepCase:true
+        // Try both casing styles
         const invoiceMethods = ['FindAll', 'findAll', 'ListInvoices'];
 
         let invoices: Invoice[] = [];
@@ -142,7 +142,6 @@ export class ReportService {
                 USER_SERVICE_NAME,
             );
 
-        // Added 'FindByIds' (PascalCase)
         const userMethods = [
             'FindByIds',
             'findByIds',
