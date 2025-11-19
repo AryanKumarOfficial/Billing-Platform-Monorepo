@@ -1,6 +1,6 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { ClientProvider } from '../client/client.provider';
-import { INVOICE_SERVICE_NAME, USER_SERVICE_NAME } from '@app/proto/src';
+import { INVOICE_SERVICE_NAME, USER_SERVICE_NAME } from '@app/proto';
 import { firstValueFrom } from 'rxjs';
 
 /**

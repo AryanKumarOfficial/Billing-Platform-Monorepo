@@ -1,7 +1,7 @@
 import { Injectable, Logger } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import { ClientProvider } from '../client/client.provider';
-import { USER_SERVICE_NAME } from '@app/proto/src';
+import { USER_SERVICE_NAME } from '@app/proto';
 import { RpcException } from '@nestjs/microservices';
 
 // Define the gRPC client interface

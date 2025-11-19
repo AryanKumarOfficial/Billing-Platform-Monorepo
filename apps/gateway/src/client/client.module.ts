@@ -1,6 +1,6 @@
 import { Global, Module } from '@nestjs/common';
 import { ClientProvider } from './client.provider';
-import { ConsulModule } from '@app/common/src';
+import { ConsulModule } from '@app/common';
 
 @Global() // Make ClientProvider available everywhere
 @Module({

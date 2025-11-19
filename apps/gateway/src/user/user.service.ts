@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ClientProvider } from '../client/client.provider';
-import { USER_SERVICE_NAME } from '@app/proto/src';
+import { USER_SERVICE_NAME } from '@app/proto';
 import { FindAllUsersResponseDto } from './dto/find-all-users.dto';
 import { FindOneUserResponseDto } from './dto/find-one-user.dto';
 import { UserDto } from './dto/user.dto';

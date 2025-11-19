@@ -6,7 +6,7 @@ import {
     ParseIntPipe,
     DefaultValuePipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '@app/common/src';
+import { JwtAuthGuard } from '@app/common';
 import { ReportService } from './report.service';
 
 @UseGuards(JwtAuthGuard)

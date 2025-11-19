@@ -19,16 +19,16 @@
     "noFallthroughCasesInSwitch": false,
     "paths": {
       "@app/common": [
-        "libs/common/src"
+        "lib/common/src"
       ],
       "@app/common/*": [
-        "libs/common/src/*"
+        "lib/common/src/*"
       ],
       "@app/proto": [
-        "libs/proto/src"
+        "apps/proto/src"
       ],
       "@app/proto/*": [
-        "libs/proto/src/*"
+        "apps/proto/src/*"
       ]
     }
   }

@@ -19,10 +19,9 @@ import {
     USER_SERVICE_NAME,
     USER_PACKAGE_NAME,
     INVOICE_PACKAGE_NAME,
-} from '@app/proto/src';
+} from '@app/proto';
 
 interface GrpcServiceClient {
-    // eslint-disable-next-line @typescript-eslint/ban-types
     [key: string]: Function;
 }
 

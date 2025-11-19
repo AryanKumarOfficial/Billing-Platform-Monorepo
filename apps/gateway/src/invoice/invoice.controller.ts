@@ -6,7 +6,7 @@ import {
     ParseIntPipe,
     DefaultValuePipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '@app/common/src';
+import { JwtAuthGuard } from '@app/common';
 import { InvoiceService } from './invoice.service';
 import { FindAllInvoicesResponseDto } from './dto/find-all-invoices.dto';
 

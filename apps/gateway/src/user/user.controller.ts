@@ -8,7 +8,7 @@ import {
     DefaultValuePipe,
     ParseUUIDPipe,
 } from '@nestjs/common';
-import { JwtAuthGuard } from '@app/common/src';
+import { JwtAuthGuard } from '@app/common';
 import { UserService } from './user.service';
 import { FindAllUsersResponseDto } from './dto/find-all-users.dto';
 import { FindOneUserResponseDto } from './dto/find-one-user.dto';

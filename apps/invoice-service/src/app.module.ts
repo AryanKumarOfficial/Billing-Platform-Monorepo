@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { ConfigModule, ConfigService } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { ConsulModule } from '@app/common/src';
+import { ConsulModule } from '@app/common';
 import * as Joi from 'joi';
 import { InvoiceModule } from './invoice/invoice.module';
 import { Invoice } from './invoice/invoice.entity';

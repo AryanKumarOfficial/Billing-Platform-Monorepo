@@ -14,14 +14,17 @@
   },
   "devDependencies": {
     "@types/node": "^20.11.5",
-    "typescript": "^5.3.3",
     "rimraf": "^5.0.5",
-    "ts-node": "^10.9.2"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.3.3"
   },
   "pnpm": {
     "workspaces": [
       "apps/*",
       "libs/*"
     ]
+  },
+  "dependencies": {
+    "tsconfig-paths": "^4.2.0"
   }
 }

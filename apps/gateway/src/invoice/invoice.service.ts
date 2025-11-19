@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { ClientProvider } from '../client/client.provider';
-import { INVOICE_SERVICE_NAME } from '@app/proto/src';
+import { INVOICE_SERVICE_NAME } from '@app/proto';
 import { InvoiceDto } from './dto/invoice.dto';
 import { FindAllInvoicesResponseDto } from './dto/find-all-invoices.dto';
 

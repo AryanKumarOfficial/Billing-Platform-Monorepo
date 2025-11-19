@@ -1,7 +1,7 @@
 import { Controller } from '@nestjs/common';
 import { GrpcMethod } from '@nestjs/microservices';
 import { InvoiceService } from './invoice.service';
-import { INVOICE_SERVICE_NAME } from '@app/proto/src';
+import { INVOICE_SERVICE_NAME } from '@app/proto';
 
 @Controller()
 export class InvoiceController {

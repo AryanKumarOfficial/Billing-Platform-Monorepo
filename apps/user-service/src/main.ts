@@ -4,7 +4,7 @@ import { MicroserviceOptions, Transport } from '@nestjs/microservices';
 import { Logger, ValidationPipe } from '@nestjs/common';
 import { ConfigService } from '@nestjs/config';
 import { ConsulService } from '@app/common/src';
-import { USER_PACKAGE_NAME, USER_PROTO_PATH } from '@app/proto/src';
+import { USER_PACKAGE_NAME, USER_PROTO_PATH } from '@app/proto';
 
 async function bootstrap() {
     const logger = new Logger('UserService');

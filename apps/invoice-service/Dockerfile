@@ -15,10 +15,14 @@ COPY apps/invoice-service/package.json ./apps/invoice-service/
 
 # Install all dependencies
 RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --production=false
 
 # Copy all source code
 COPY . .
+
+# Build shared libraries first
+RUN pnpm --filter "@app/proto" build
+RUN pnpm --filter "@app/common" build
 
 # Build all dependencies and the app itself
 RUN pnpm --filter "invoice-service" build
@@ -39,10 +43,9 @@ COPY apps/proto/package.json ./apps/proto/
 COPY apps/invoice-service/package.json ./apps/invoice-service/
 
 RUN npm install -g pnpm
-RUN pnpm install --frozen-lockfile
+RUN pnpm install --frozen-lockfile --production=false
 
 # Copy built artifacts from development stage
-COPY --from=development /usr/src/app/dist ./dist
 COPY --from=development /usr/src/app/lib/common/dist ./lib/common/dist
 COPY --from=development /usr/src/app/apps/proto/dist ./apps/proto/dist
 COPY --from=development /usr/src/app/apps/invoice-service/dist ./apps/invoice-service/dist
