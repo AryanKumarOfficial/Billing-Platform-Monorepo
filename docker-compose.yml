@@ -63,7 +63,7 @@ services:
       dockerfile: ./apps/gateway/Dockerfile
     container_name: gateway
     ports:
-      - "3000:3000"
+      - "5000:5000"
     env_file:
       - ./apps/gateway/.env
     depends_on:

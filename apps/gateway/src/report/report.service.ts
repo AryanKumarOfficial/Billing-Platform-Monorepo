@@ -8,12 +8,12 @@ import { firstValueFrom } from 'rxjs';
  * Note: we include an index signature on the client interfaces so they
  * satisfy broad GrpcServiceClient constraints used elsewhere in the codebase.
  */
-interface PaginationQuery {
+export interface PaginationQuery {
     limit: number;
     offset: number;
 }
 
-interface Invoice {
+export interface Invoice {
     id: string;
     // some services use snake_case, some camelCase
     user_id?: string;
@@ -25,7 +25,7 @@ interface Invoice {
     [key: string]: any;
 }
 
-interface User {
+export interface User {
     id: string;
     email?: string;
     name?: string;
@@ -33,14 +33,14 @@ interface User {
 }
 
 /** Add index signature to satisfy generic constraints on your client provider */
-interface InvoiceServiceClient {
+export interface InvoiceServiceClient {
     [key: string]: any;
     findAll?: (query: PaginationQuery) => Promise<{ invoices: Invoice[]; total?: number }>;
     ListInvoices?: (query: PaginationQuery) => Promise<{ invoices: Invoice[]; total?: number }>;
     listInvoices?: (query: PaginationQuery) => Promise<{ invoices: Invoice[]; total?: number }>;
 }
 
-interface UserServiceClient {
+export interface UserServiceClient {
     [key: string]: any;
     findByIds?: (data: { ids: string[] }) => Promise<{ users: User[] }>;
     FindByIds?: (data: { ids: string[] }) => Promise<{ users: User[] }>;

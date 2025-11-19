@@ -5,9 +5,8 @@
   "main": "dist/index.js",
   "types": "dist/index.d.ts",
   "scripts": {
-    "build": "rimraf dist && tsc -p tsconfig.json",
-    "prebuild": "pnpm run copy:protos",
-    "copy:protos": "rimraf dist/proto && mkdirp dist/proto && copyfiles -u 1 \"src/proto/**/*.proto\" dist/proto"
+    "build": "rimraf dist && tsc -p tsconfig.json && pnpm run copy:protos",
+    "copy:protos": "mkdirp dist/proto && copyfiles -u 1 \"src/proto/**/*.proto\" dist"
   },
   "devDependencies": {
     "rimraf": "^5.0.5",
