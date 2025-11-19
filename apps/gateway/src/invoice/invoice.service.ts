@@ -6,9 +6,10 @@ import { FindAllInvoicesResponseDto } from './dto/find-all-invoices.dto';
 
 interface InvoiceServiceClient {
     [key: string]: any;
-    findAll?: (
-        query: { limit: number; offset: number }
-    ) => Promise<{ invoices: any[]; total?: number }>;
+    findAll: (
+        query: { limit: number; offset: number },
+        callback: (err: any, response: any) => void
+    ) => void;
 }
 
 @Injectable()
@@ -24,11 +25,17 @@ export class InvoiceService {
                 INVOICE_SERVICE_NAME,
             );
 
-        const resp = await client.findAll!(pagination);
+        // FIX: Wrap callback in Promise
+        const resp: any = await new Promise((resolve, reject) => {
+            client.findAll(pagination, (err, response) => {
+                if (err) return reject(err);
+                resolve(response);
+            });
+        });
 
         const rawInvoices = Array.isArray(resp?.invoices) ? resp.invoices : [];
 
-        const invoices: InvoiceDto[] = rawInvoices.map((inv) => ({
+        const invoices: InvoiceDto[] = rawInvoices.map((inv: any) => ({
             id: inv.id ?? '',
             userId: inv.userId ?? inv.user_id ?? '',
             description: inv.description ?? '',
